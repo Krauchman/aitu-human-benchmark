@@ -15,7 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'name', 'lastname', 'avatar', 'avatarThumb', 'joined']
+        fields = ['id', 'phone', 'name', 'lastname', 'avatar', 'avatarThumb', 'joined']
 
 
 class ScoresSerializer(serializers.ModelSerializer):

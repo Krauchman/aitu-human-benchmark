@@ -10,6 +10,12 @@ from users.serializers import UserSerializer, ScoresSerializer
 from users.models import User, Scores
 
 
+GAME_NAME_TO_INTERNAL = {
+    'numberMemory': 'number_memory',
+    'reactionTime': 'reaction_time',
+}
+
+
 class UserViewSet(mixins.UpdateModelMixin,
                   mixins.CreateModelMixin,
                   GenericViewSet):
@@ -73,3 +79,36 @@ class UserViewSet(mixins.UpdateModelMixin,
 
             return Response(serializer_instace.data)
 
+    def get_leaderboard_from_data(self, data, game_name):
+        users = []
+        for raw_user_data in data:
+            try:
+                user = User.objects.get(phone=raw_user_data['phone'])
+            except User.DoesNotExist:
+                continue
+            score = getattr(user.get_latest_scores(), game_name, None)
+            if score is None:
+                continue
+
+            user_data = UserSerializer(user).data
+            user_data['score'] = score
+            users.append(user_data)
+
+        if game_name == 'reaction_time':
+            result = sorted(users, key=lambda k: k['score'])
+        else:
+            result = sorted(users, key=lambda k: -k['score'])
+
+        return result
+
+    @action(detail=True)
+    def leaderboard(self, request, pk=None):
+        user = self.get_object()
+        game_name = request.data['gameName']
+        game_name = GAME_NAME_TO_INTERNAL[game_name]
+        contacts_data = request.data['contacts']
+        contacts_data.append(UserSerializer(user).data)
+
+        leaderboard = self.get_leaderboard_from_data(contacts_data, game_name)
+
+        return Response(leaderboard)
