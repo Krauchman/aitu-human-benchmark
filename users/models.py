@@ -12,10 +12,25 @@ class User(models.Model):
 
     joined = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return str(self.first_name) + ' ' + str(self.last_name)
+
+    def get_latest_scores(self):
+        if not self.scores_history.filter(latest=True).exists():
+            if not self.scores_history.exists():
+                self.scores_history.create()
+            else:
+                latest = self.scores_history.order_by('date').last()
+                latest.latest = True
+                latest.save(update_fields=['latest'])
+
+        return self.scores_history.filter(latest=True).last()
+
 
 class Scores(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='scores_history')
     date = models.DateTimeField(auto_now_add=True)
+    latest = models.BooleanField(default=True)
 
-    number_memory = models.IntegerField(blank=True, null=True)
-    reaction_time = models.FloatField(blank=True, null=True)
+    number_memory = models.IntegerField(blank=True, null=True, default=None)
+    reaction_time = models.FloatField(blank=True, null=True, default=None)

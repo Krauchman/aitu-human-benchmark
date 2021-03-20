@@ -16,3 +16,13 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'name', 'lastname', 'avatar', 'avatarThumb', 'joined']
+
+
+class ScoresSerializer(serializers.ModelSerializer):
+
+    numberMemory = serializers.IntegerField(source='number_memory', required=False)
+    reactionTime = serializers.FloatField(source='reaction_time', required=False)
+
+    class Meta:
+        model = Scores
+        fields = ['user', 'numberMemory', 'reactionTime']
