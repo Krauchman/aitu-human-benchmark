@@ -1,1 +1,1 @@
-web: gunicorn myproject.wsgi
+web: gunicorn human_benchmark.wsgi
