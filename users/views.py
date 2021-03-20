@@ -1,3 +1,5 @@
+import scipy.stats
+
 from django.http import Http404
 
 from rest_framework import mixins
@@ -38,8 +40,12 @@ class UserViewSet(mixins.UpdateModelMixin,
         if scores[game_name] is None:
             item['ratio'] = None
         else:
-            worse = Scores.objects.filter(latest=True, **{filter_kwarg: scores[game_name]}).count()
-            item['ratio'] = worse / total if total != 0 else 1
+            if game_name == 'numberMemory':
+                item['ratio'] = scipy.stats.norm.cdf(scores[game_name], loc=8.2, scale=2)
+            elif game_name == 'chimpTest':
+                item['ratio'] = scipy.stats.norm.cdf(scores[game_name], loc=9.8, scale=2)
+            else:
+                item['ratio'] = (1 - scipy.stats.exponnorm.cdf(scores[game_name], 2.2, loc=200, scale=30))
 
         result[game_name] = item
 
