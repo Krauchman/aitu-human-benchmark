@@ -28,10 +28,22 @@ class UserViewSet(mixins.UpdateModelMixin,
             'score': scores[game_name],
         }
 
-        worse = Scores.objects.filter(latest=True, **{filter_kwarg: scores[game_name]}).count()
-        item['ratio'] = worse / total if total != 0 else 1
+        if scores[game_name] is None:
+            item['ratio'] = None
+        else:
+            worse = Scores.objects.filter(latest=True, **{filter_kwarg: scores[game_name]}).count()
+            item['ratio'] = worse / total if total != 0 else 1
 
         result[game_name] = item
+
+    def update_score(self, scores, new_scores, game_name, best):
+        if game_name in new_scores and new_scores[game_name] is not None:
+            if scores[game_name] is not None:
+                scores[game_name] = best(scores[game_name], new_scores[game_name])
+            else:
+                scores[game_name] = new_scores[game_name]
+        elif scores[game_name] is None:
+            scores.pop(game_name)
 
     @action(detail=True, methods=['get', 'post'])
     def scores(self, request, pk=None):
@@ -49,11 +61,8 @@ class UserViewSet(mixins.UpdateModelMixin,
             return Response(response_data)
 
         elif request.method == 'POST':
-            if 'numberMemory' in request.data:
-                latest_scores_data['numberMemory'] = max(latest_scores_data['numberMemory'], request.data['numberMemory'])
-
-            if 'reactionTime' in request.data:
-                latest_scores_data['reactionTime'] = min(latest_scores_data['reactionTime'], request.data['reactionTime'])
+            self.update_score(latest_scores_data, request.data, 'numberMemory', max)
+            self.update_score(latest_scores_data, request.data, 'reactionTime', min)
 
             serializer_instace = ScoresSerializer(data=latest_scores_data)
             serializer_instace.is_valid(raise_exception=True)
