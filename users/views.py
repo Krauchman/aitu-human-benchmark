@@ -12,6 +12,7 @@ from users.models import User, Scores
 
 GAME_NAME_TO_INTERNAL = {
     'numberMemory': 'number_memory',
+    'chimpTest': 'chimp_test',
     'reactionTime': 'reaction_time',
 }
 
@@ -62,12 +63,14 @@ class UserViewSet(mixins.UpdateModelMixin,
             total_scores = Scores.objects.filter(latest=True).count()
 
             self.add_with_ratio(response_data, latest_scores_data, total_scores, 'numberMemory', 'number_memory__lt')
+            self.add_with_ratio(response_data, latest_scores_data, total_scores, 'chimpTest', 'chimp_test__lt')
             self.add_with_ratio(response_data, latest_scores_data, total_scores, 'reactionTime', 'reaction_time__gt')
 
             return Response(response_data)
 
         elif request.method == 'POST':
             self.update_score(latest_scores_data, request.data, 'numberMemory', max)
+            self.update_score(latest_scores_data, request.data, 'chimpTest', max)
             self.update_score(latest_scores_data, request.data, 'reactionTime', min)
 
             serializer_instace = ScoresSerializer(data=latest_scores_data)

@@ -34,4 +34,5 @@ class Scores(models.Model):
     latest = models.BooleanField(default=True)
 
     number_memory = models.IntegerField(blank=True, null=True, default=None)
+    chimp_test = models.IntegerField(blank=True, null=True, default=None)
     reaction_time = models.FloatField(blank=True, null=True, default=None)

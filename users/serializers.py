@@ -21,8 +21,9 @@ class UserSerializer(serializers.ModelSerializer):
 class ScoresSerializer(serializers.ModelSerializer):
 
     numberMemory = serializers.IntegerField(source='number_memory', required=False)
+    chimpTest = serializers.IntegerField(source='chimp_test', required=False)
     reactionTime = serializers.FloatField(source='reaction_time', required=False)
 
     class Meta:
         model = Scores
-        fields = ['user', 'numberMemory', 'reactionTime']
+        fields = ['user', 'numberMemory', 'chimpTest', 'reactionTime']
