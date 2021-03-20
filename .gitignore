@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# PyCharm
+.idea/
+
+# Environments
+/venv/
+/human_benchmark/.env
+
+# Python
+__pycache__/
+
+db.sqlite3
