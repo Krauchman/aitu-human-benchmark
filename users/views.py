@@ -41,11 +41,11 @@ class UserViewSet(mixins.UpdateModelMixin,
             item['ratio'] = None
         else:
             if game_name == 'numberMemory':
-                item['ratio'] = scipy.stats.norm.cdf(scores[game_name], loc=8.2, scale=2)
+                item['ratio'] = scipy.stats.norm.cdf(scores[game_name], loc=8.2, scale=2) * 100
             elif game_name == 'chimpTest':
-                item['ratio'] = scipy.stats.norm.cdf(scores[game_name], loc=9.8, scale=2)
+                item['ratio'] = scipy.stats.norm.cdf(scores[game_name], loc=9.8, scale=2) * 100
             else:
-                item['ratio'] = (1 - scipy.stats.exponnorm.cdf(scores[game_name], 2.2, loc=200, scale=30))
+                item['ratio'] = (1 - scipy.stats.exponnorm.cdf(scores[game_name], 2.2, loc=200, scale=30)) * 100
 
         result[game_name] = item
 
