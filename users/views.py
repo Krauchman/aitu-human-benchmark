@@ -110,7 +110,7 @@ class UserViewSet(mixins.UpdateModelMixin,
 
         return result
 
-    @action(detail=True)
+    @action(detail=True, methods=['post'])
     def leaderboard(self, request, pk=None):
         user = self.get_object()
         game_name = request.data['gameName']
