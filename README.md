@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://i2.app.link/q4gdvuuaneb">
-    <img width="210" src="./public/logo.jpeg">
+    <img width="210" src="https://github.com/ironsoul0/hacknu-2021/raw/master/public/logo.jpeg">
   </a>
 </p>
 <h1 align="center">
@@ -17,7 +17,7 @@
 
 ## 🏗️ Builders
 
-* Rauan [@Krauchman](https://github.com/Krauchman) Omarov
 * Akezhan [@Akezh](https://github.com/Akezh) Rakishev
 * Sanzhar [@SBidaibek](https://github.com/SBidaibek) Bidaibek
 * Temirzhan [@ironsoul0](https://github.com/ironsoul0) Yussupov
+* Rauan [@Krauchman](https://github.com/Krauchman) Omarov
